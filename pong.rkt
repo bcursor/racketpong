@@ -1,16 +1,48 @@
 #lang racket 
 (require 2htdp/image)
+(require 2htdp/universe)
 
 ; Pong project written by Bilgi CS students
 
+(define-struct thing (obj x y vx vy))
+
+(define our-ball (make-thing (circle 20 "solid" "blue")
+                             0
+                             0
+                             0
+                             0))
+
+(define plane1 (make-thing (rectangle 40 20 "solid" "red")
+                           0
+                           0
+                           0
+                           0))
+
+(define plane2 (make-thing (rectangle 40 20 "solid" "red")
+                           0
+                           0
+                           0
+                           0))
 
 
-(define-struct Ball (x y vx vy radius color mode))
-; - x is a Number, x coordinate of Ball
-; - y is a Number, y coordinate of Ball
-; - vx is a Number, velocity on x plane
-; - vy is a Number, velocity on y plane
-; - radius is a Number, radius of Ball
-; - color is a Color, color of Ball
-; - mode is a String, "outline" or "solid"
+
+(define planes (list plane1 plane2))
+
+;; list-of-things
+(define things (append (list our-ball) planes))
+
+(define board (empty-scene 200 200))
+
+(define durum 'a)
+(define (draw s) 
+  (foldr 
+   (λ (thng scn)
+     (place-image (thing-obj thng) (thing-x thng) (thing-y thng) scn)) 
+   board 
+   s))
+
+(big-bang things (to-draw draw))
+
+
+
 
